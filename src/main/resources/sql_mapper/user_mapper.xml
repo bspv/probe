@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bazzi.probe.dao.UserDao">
+	<resultMap id="user" type="com.bazzi.probe.model.User">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
+		<result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
+		<result column="sex" jdbcType="INTEGER" property="sex" />
+		<result column="platform" jdbcType="INTEGER" property="platform" />
+		<result column="imei" jdbcType="VARCHAR" property="imei" />
+		<result column="reg_time" jdbcType="TIMESTAMP" property="regTime" />
+		<result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, user_name, password, mobile, avatar_url, sex, platform, imei,
+		reg_time, last_login_time
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="user">
+		select
+		<include refid="Base_Column_List" />
+		from user
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="user">
+		insert into user (id, user_name, password,
+		mobile, avatar_url, sex,
+		platform, imei, reg_time,
+		last_login_time)
+		values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{mobile,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER},
+		#{platform,jdbcType=INTEGER}, #{imei,jdbcType=VARCHAR},
+		#{regTime,jdbcType=TIMESTAMP},
+		#{lastLoginTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="user">
+		insert into user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="avatarUrl != null">
+				avatar_url,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="platform != null">
+				platform,
+			</if>
+			<if test="imei != null">
+				imei,
+			</if>
+			<if test="regTime != null">
+				reg_time,
+			</if>
+			<if test="lastLoginTime != null">
+				last_login_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="avatarUrl != null">
+				#{avatarUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=INTEGER},
+			</if>
+			<if test="platform != null">
+				#{platform,jdbcType=INTEGER},
+			</if>
+			<if test="imei != null">
+				#{imei,jdbcType=VARCHAR},
+			</if>
+			<if test="regTime != null">
+				#{regTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastLoginTime != null">
+				#{lastLoginTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="user">
+		update user
+		<set>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="avatarUrl != null">
+				avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=INTEGER},
+			</if>
+			<if test="platform != null">
+				platform = #{platform,jdbcType=INTEGER},
+			</if>
+			<if test="imei != null">
+				imei = #{imei,jdbcType=VARCHAR},
+			</if>
+			<if test="regTime != null">
+				reg_time = #{regTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastLoginTime != null">
+				last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="user">
+		update user
+		set user_name = #{userName,jdbcType=VARCHAR},
+		password = #{password,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+		sex = #{sex,jdbcType=INTEGER},
+		platform = #{platform,jdbcType=INTEGER},
+		imei = #{imei,jdbcType=VARCHAR},
+		reg_time = #{regTime,jdbcType=TIMESTAMP},
+		last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

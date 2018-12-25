@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd"
+	default-autowire="byName">
+	
+	<bean id="consumer" class="com.bazzi.core.mq.Consumer" 
+		p:consumerGroupName="${mq.consumerGroupName}" 
+		p:namesrvAddr="${mq.namesrvAddr}" 
+		p:topic="${mq.topic}" 
+		init-method="init" destroy-method="destroy">
+	</bean>
+	<bean id="producer" class="com.bazzi.core.mq.Producer" 
+		p:producerGroupName="${mq.producerGroupName}" 
+		p:namesrvAddr="${mq.namesrvAddr}" 
+		init-method="init" destroy-method="destroy"/>
+
+</beans>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd   
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-4.3.xsd"
+	default-lazy-init="true">
+
+	<bean id="dataSource.default.dbcp" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<!-- 0 初始化连接:连接池启动时创建的初始化连接数量,1.2版本后支持 -->
+		<property name="initialSize" value="0" />
+		<!-- 8 最大活动连接:连接池在同一时间能够分配的最大活动连接的数量, 如果设置为非正数则表示不限制 -->
+		<!-- <property name="maxActive" value="1"/> -->
+		<!-- 8 最大空闲连接:连接池中容许保持空闲状态的最大连接数量,超过的空闲连接将被释放,如果设置为负数表示不限制 -->
+		<property name="maxIdle" value="0" />
+		<!-- 0 最小空闲连接:连接池中容许保持空闲状态的最小连接数量,低于这个数量将创建新的连接,如果设置为0则不创建 -->
+		<property name="minIdle" value="0" />
+		<!-- 无限 最大等待时间:当没有可用连接时,连接池等待连接被归还的最大时间(以毫秒计数),超过时间则抛出异常,如果设置为-1表示无限等待 -->
+		<property name="maxWait" value="${default.dbcp.jdbc.maxWait}" />
+		<!-- SQL查询,用来验证从连接池取出的连接,在将连接返回给调用者之前.如果指定,则查询必须是一个SQL SELECT并且必须返回至少一行记录 -->
+		<property name="validationQuery" value="${default.dbcp.jdbc.validationQuery}" />
+		<!-- true 指明是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个.注意: 设置为true后如果要生效,validationQuery参数必须设置为非空字符串 -->
+		<property name="testOnBorrow" value="${default.dbcp.jdbc.testOnBorrow}" />
+		<!-- false 指明是否在归还到池中前进行检验 -->
+		<property name="testOnReturn" value="${default.dbcp.jdbc.testOnReturn}" />
+		<!-- false 指明连接是否被空闲连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除. -->
+		<property name="testWhileIdle" value="${default.dbcp.jdbc.testWhileIdle}" />
+		<!-- -1 在空闲连接回收器线程运行期间休眠的时间值,以毫秒为单位. 如果设置为非正数,则不运行空闲连接回收器线程 -->
+		<property name="timeBetweenEvictionRunsMillis"
+			value="${default.dbcp.jdbc.timeBetweenEvictionRunsMillis}" />
+		<!-- 3 在每次空闲连接回收器线程(如果有)运行时检查的连接数量 -->
+		<property name="numTestsPerEvictionRun" value="${default.dbcp.jdbc.numTestsPerEvictionRun}" />
+		<!-- 1000 * 60 * 30 连接在池中保持空闲而不被空闲连接回收器线程(如果有)回收的最小时间值，单位毫秒 -->
+		<property name="minEvictableIdleTimeMillis"
+			value="${default.dbcp.jdbc.minEvictableIdleTimeMillis}" />
+		<!-- false 开启池的prepared statement 池功能 -->
+		<!-- <property name="poolPreparedStatements" value="${default.dbcp.jdbc.poolPreparedStatements}"/> -->
+		<!-- 不限制 statement池能够同时分配的打开的statements的最大数量, 如果设置为0表示不限制 -->
+		<!-- <property name="maxOpenPreparedStatements" value="${default.dbcp.jdbc.maxOpenPreparedStatements}"/> -->
+		<!-- false 标 记是否删除泄露的连接,如果他们超过了removeAbandonedTimout的限制.如果设置为true, 连接被认为是被泄露并且可以被删除,如果空闲时间超过removeAbandonedTimeout. 
+			设置为true可以为写法糟糕的没有关闭连接的程序修复数据库连接. -->
+		<property name="removeAbandoned" value="${default.dbcp.jdbc.removeAbandoned}" />
+		<!-- 300 泄露的连接可以被删除的超时值, 单位秒 -->
+		<property name="removeAbandonedTimeout" value="${default.dbcp.jdbc.removeAbandonedTimeout}" />
+		<!-- false 标记当Statement或连接被泄露时是否打印程序的stack traces日志。被泄露的Statements和连接的日志添加在每个连接打开或者生成新的Statement,因为需要生成stack 
+			trace。 -->
+		<!-- <property name="logAbandoned" value="${default.dbcp.jdbc.logAbandoned}"/> -->
+	</bean>
+
+	<bean id="masterDataSource" parent="dataSource.default.dbcp">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="${jdbc.max}" />
+		<property name="maxIdle" value="${jdbc.max}" />
+		<property name="minIdle" value="${jdbc.min}" />
+	</bean>
+
+
+	<bean id="slaveDataSource" parent="dataSource.default.dbcp">
+		<property name="driverClassName" value="${slave.jdbc.driverClassName}" />
+		<property name="url" value="${slave.jdbc.url}" />
+		<property name="username" value="${slave.jdbc.username}" />
+		<property name="password" value="${slave.jdbc.password}" />
+		<property name="maxActive" value="${slave.jdbc.max}" />
+		<property name="maxIdle" value="${slave.jdbc.max}" />
+		<property name="minIdle" value="${slave.jdbc.min}" />
+	</bean>
+
+
+	<bean id="dynamicDataSource" class="com.bazzi.core.ds.DynamicDataSource">
+		<!-- 默认数据源 -->
+		<property name="defaultTargetDataSource" ref="masterDataSource" />
+		<property name="targetDataSources">
+			<map>
+				<entry key="MASTER" value-ref="masterDataSource" />
+				<!-- 这里还可以加多个SLAVE的dataSource -->
+				<entry key="SLAVE1" value-ref="slaveDataSource" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="currentSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dynamicDataSource" />
+		<!-- 自动匹配Mapper映射文件 -->
+		<property name="mapperLocations" value="classpath*:sql_mapper/*_mapper.xml" />
+		<property name="typeAliasesPackage" value="com.bazzi.probe.model" />
+	</bean>
+
+	<bean id="transactionManager" class="com.bazzi.core.ds.DataSourceTransactionHandler">
+		<property name="dataSource" ref="dynamicDataSource" />
+	</bean>
+
+	<!-- 配置AspectJ，实现按照expression表达式来切换主从 -->
+	<aop:config>
+		<aop:aspect id="switchAspect" ref="dynamicDataSource">
+			<aop:pointcut id="switchDS"
+				expression="(execution(* com.bazzi.probe.dao.*.find*(..))
+				|| execution(* com.bazzi.probe.dao.*.get*(..)))
+				|| execution(* com.bazzi.probe.dao.*.load*(..)))
+				|| execution(* com.bazzi.probe.dao.*.select*(..)))
+				|| execution(* com.bazzi.probe.dao.*.inquiry*(..)))" />
+			<aop:before method="beforeDataSourceSlave" pointcut-ref="switchDS" />
+			<aop:after method="reset" pointcut-ref="switchDS" />
+		</aop:aspect>
+	</aop:config>
+
+	<!-- 使用annotation定义事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="true" />
+
+</beans>

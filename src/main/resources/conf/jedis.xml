@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+	<bean id="standard" class="com.bazzi.core.redis.impl.Standard">
+		<property name="host" value="${redis.host}"/>
+		<property name="port" value="${redis.port}"/>
+		<property name="database" value="${redis.database}"/>
+		<property name="maxIdle" value="${redis.maxIdle}"/>
+		<property name="minIdle" value="${redis.minIdle}"/>
+		<property name="password" value="${redis.password}"/>
+		<property name="maxTotal" value="${redis.maxTotal}"/>
+		<property name="qps" value="${redis.qps}"/>
+		<property name="warmup" value="${redis.warmup}"/>
+	</bean>
+	
+	<!-- <bean id="cluster" class="com.bazzi.core.redis.impl.Cluster">
+		<property name="cluster" value="${redis.cluster}"/>
+		<property name="qps" value="${redis.cluster.qps}"/>
+		<property name="warmup" value="${redis.cluster.warmup}"/>
+	</bean> -->
+	
+</beans>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd"
+	default-autowire="byName">
+
+	<bean id="jedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		destroy-method="destroy">
+		<property name="hostName" value="${redis.host}" />
+		<property name="port" value="${redis.port}" />
+		<property name="password" value="${redis.password}"/>
+		<property name="database" value="${redis.database}"/>
+	</bean>
+
+	<!-- <bean id="jedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		destroy-method="destroy">
+		<constructor-arg name="clusterConfig">
+			<bean
+				class="org.springframework.data.redis.connection.RedisClusterConfiguration">
+				<constructor-arg name="clusterNodes">
+					<set>
+						<value>${redis.cluster}</value>
+					</set>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+	</bean> -->
+
+	<!-- 让session写入redis -->
+	<bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
+		<property name="maxInactiveIntervalInSeconds" value="1800" />
+	</bean>
+
+</beans>

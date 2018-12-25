@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Logback Configuration. -->
+<configuration debug="false">
+    <property resource="env_${pom.profile.active}/env_${pom.profile.active}.properties"/>
+    <property name="SEARCH_MSG_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%level][%thread] %logger{20} - %m%n"/>
+    <property name="TRADE_MSG_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%level][%thread] %logger{20} - %m%n"/>
+    <property name="LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%level][%thread] %logger{20} - %m%n"/>
+    <property name="maxHistory" value="30"/>
+    <!-- root logger -->
+    <appender name="rootAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${loggingRoot}/probe.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${loggingLevel.root.filterLevel}</level>
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <immediateFlush>true</immediateFlush>
+            <charset>${loggingCharset}</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${loggingRoot}/probe.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="asyncRootAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="rootAppender" />
+        <queueSize>1024</queueSize>
+        <neverBlock>true</neverBlock>
+    </appender>
+    
+    <!-- 控制台输出 -->
+    <appender name="stdoutAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+	<!-- Zookeeper日志 -->
+	<logger name="org.apache.zookeeper" level="INFO"/>
+
+    <root>
+        <level value="${loggingLevel.root}"/>
+        <appender-ref ref="asyncRootAppender"/>
+        <appender-ref ref="stdoutAppender"/>
+    </root>
+
+</configuration>

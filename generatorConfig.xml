@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<context id="MysqlContext" targetRuntime="MyBatis3"
+		defaultModelType="flat">
+		<property name="beginningDelimiter" value="`" />
+		<property name="endingDelimiter" value="`" />
+
+		<commentGenerator>
+			<property name="suppressDate" value="true" />
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/probe" userId="root"
+			password="123456">
+		</jdbcConnection>
+
+		<javaModelGenerator targetPackage="com.bazzi.probe.model"
+			targetProject="probe\src\main\java">
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="sql_mapper"
+			targetProject="probe\src\main\resources" />
+
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.bazzi.probe.dao" targetProject="probe\src\main\java" />
+
+		<table tableName="user" domainObjectName="User"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false" delimitAllColumns="true"
+			enableUpdateByPrimaryKey="false"/>
+		<table tableName="order_info" domainObjectName="OrderInfo"
+			   enableCountByExample="false" enableUpdateByExample="false"
+			   enableDeleteByExample="false" enableSelectByExample="false"
+			   selectByExampleQueryId="false" delimitAllColumns="true"
+			   enableUpdateByPrimaryKey="false"/>
+	</context>
+</generatorConfiguration>
